@@ -14,7 +14,7 @@ from google.protobuf.message import DecodeError
 
 VIP_KEY = "papabol"  
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 def load_tokens(server_name):
     try:
@@ -94,7 +94,7 @@ async def send_multiple_requests(uid, server_name, url):
         if tokens is None:
             app.logger.error("Failed to load tokens.")
             return None
-        for i in range(100):
+        for i in range(200):
             token = tokens[i % len(tokens)]["token"]
             tasks.append(send_request(encrypted_uid, token, url))
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -170,7 +170,7 @@ def handle_requests():
     vipkey = request.args.get("vipkey")
 
     if not uid or not server_name or vipkey != VIP_KEY:
-        return jsonify({"error": "Invalid request parameters or VIP key"}), 400
+        return jsonify({"error": "💰 Want a valid VIP key? DM me on tg @vipbhai0029🫣"}), 400
     try:
         def process_request():
             tokens = load_tokens(server_name)
@@ -238,5 +238,5 @@ def handle_requests():
         app.logger.error(f"Error processing request: {e}")
         return jsonify({"error": str(e)}), 500
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
